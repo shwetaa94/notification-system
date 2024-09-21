@@ -1,0 +1,13 @@
+api/node_modules
+email/node_modules
+phone/node_modules
+whatsapp/node_modules
+filter/node_modules
+
+
+api/dist
+email/dist
+phone/dist
+whatsapp/dist
+filter/dist
+
