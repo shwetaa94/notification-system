@@ -11,3 +11,10 @@ phone/dist
 whatsapp/dist
 filter/dist
 
+.env
+*.env
+api/.env
+email/.env
+phone/.env
+whatsapp/.env
+filter/.env
