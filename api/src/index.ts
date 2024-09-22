@@ -30,15 +30,15 @@ app.post("/notification", async(req: Request, res: Response) => {
     let publisher = RedisManager.getInstance();       
 
     if(notificationPrefrences?.sms){
-        await publisher.pushToQueue({message, to:user.phone, service:'sms', priority})     //message, to(self- for test), service, priority
+        await publisher.pushToQueue({message, to:user.phone, service:'sms', priority, name:user.name})     //message, to(self- for test), service, priority, name
         // console.log("SMS message pushed to Queue")
     }       
     if(notificationPrefrences?.email){
-        await publisher.pushToQueue({message, to:user.email, service:'email', priority})
+        await publisher.pushToQueue({message, to:user.email, service:'email', priority, name:user.name})
         // console.log("email message pushed to Queue")
     }     
     if(notificationPrefrences?.whatsapp){
-        await publisher.pushToQueue({message, to:user.phone, service:'whatsapp', priority})
+        await publisher.pushToQueue({message, to:user.phone, service:'whatsapp', priority, name:user.name})
         // console.log("Whatsapp message pushed to Queue")
     }  
 
