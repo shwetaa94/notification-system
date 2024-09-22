@@ -19,5 +19,6 @@ export class RedisManager {
   public async pushToQueue({message, to, service, priority}:{message: string, to: string, service:string, priority: number}){
     const channel = `${service}-${priority}`;
     await this.redisClient.lPush(channel, JSON.stringify({message, to}))
+    console.log(`message pushed to Queue: ${channel}`)
   }
 }

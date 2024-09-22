@@ -31,15 +31,15 @@ app.post("/notification", async(req: Request, res: Response) => {
 
     if(notificationPrefrences?.sms){
         await publisher.pushToQueue({message, to:user.phone, service:'sms', priority})     //message, to(self- for test), service, priority
-        console.log("SMS message pushed to Queue")
+        // console.log("SMS message pushed to Queue")
     }       
     if(notificationPrefrences?.email){
         await publisher.pushToQueue({message, to:user.email, service:'email', priority})
-        console.log("email message pushed to Queue")
+        // console.log("email message pushed to Queue")
     }     
     if(notificationPrefrences?.whatsapp){
         await publisher.pushToQueue({message, to:user.phone, service:'whatsapp', priority})
-        console.log("Whatsapp message pushed to Queue")
+        // console.log("Whatsapp message pushed to Queue")
     }  
 
     res.status(200).json({ message: "Notification sent successfully" });
