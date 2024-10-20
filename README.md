@@ -1,6 +1,6 @@
 # Notification System
 
-A scalable notification system built with Node.js and Express, utilizing Kafka for message handling and microservices architecture. The backend API pushes notification data to Kafka, which is then processed by dedicated consumers for email, SMS, and WhatsApp notifications.
+A scalable notification system built with Node.js and Express, utilizing Redis for message handling and microservices architecture. The backend API pushes notification data to Redis, which is then processed by dedicated consumers for email, SMS, and WhatsApp notifications.
 
 ## Images
 
@@ -14,21 +14,21 @@ A scalable notification system built with Node.js and Express, utilizing Kafka f
 
 - **Microservices Architecture**: Ensures modularity and scalability.
 - **Unified API Endpoint**: Send notifications via email, SMS, or WhatsApp using a single API.
-- **Kafka Integration**: Manages and routes notification messages asynchronously.
+- **Redis Integration**: Manages and routes notification messages asynchronously.
 - **Dedicated Consumers**: Separate consumers handle email, SMS, and WhatsApp notifications.
 
 ## Technologies
 
 - **Node.js**: JavaScript runtime for server-side applications.
 - **Express**: Web framework for API development.
-- **Kafka**: Distributed streaming platform for managing messages.
+- **Redis**: Distributed streaming platform for managing messages.
 - **Brevo**: Service provider for email notifications.
 - **Tailliwo**: Service provider for SMS and WhatsApp messaging.
 
 ## Architecture
 
-1. **Backend API**: Exposes a single endpoint to receive notification requests and pushes notification data to Kafka.
-2. **Kafka**: Handles asynchronous message processing and routing.
+1. **Backend API**: Exposes a single endpoint to receive notification requests and pushes notification data to Redis.
+2. **Redis**: Handles asynchronous message processing and routing.
 3. **Consumers**: Dedicated services for processing notifications:
    - **Email Consumer**: Sends notifications via Brevo.
    - **SMS Consumer**: Sends notifications via Tailliwo.
@@ -97,7 +97,7 @@ A scalable notification system built with Node.js and Express, utilizing Kafka f
 
 8. **Run Consumers:**
 
-    Start each consumer to process notifications from Kafka:
+    Start each consumer to process notifications from Redis:
 
     ```bash
     cd email && npm run start
