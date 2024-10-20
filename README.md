@@ -39,7 +39,7 @@ A scalable notification system built with Node.js and Express, utilizing Kafka f
 ### Prerequisites
 
 - Node.js (v14.x or higher)
-- Kafka (for local development or a Kafka cluster)
+- Redis (for local development or a Redis server)
 - Brevo and Tailliwo accounts
 
 ### Installation
@@ -47,7 +47,7 @@ A scalable notification system built with Node.js and Express, utilizing Kafka f
 1. **Clone the repository:**
 
     ```bash
-    git clone https://github.com/mrsingh-rishi/notification-system.git
+    git clone https://github.com/shwetaa94/notification-system.git
     cd notification-system
     ```
 
@@ -70,11 +70,11 @@ A scalable notification system built with Node.js and Express, utilizing Kafka f
 
 3. **Configuration:**
 
-    Rename the `.env.example` file in `email-consumer`, `sms-consumer`, and `whatsapp-consumer` to `.env` and update the necessary environment variables.
+    Rename the `.env.example` file in `email`, `sms`, and `whatsapp` to `.env` and update the necessary environment variables.
 
-4. **Start Kafka:**
+4. **Start Redis:**
 
-    Ensure Kafka is running on your local machine or use a Kafka cluster. For local development, follow the [Kafka Quickstart](https://kafka.apache.org/quickstart).
+    Ensure Redis is running on your local machine or use a Docker cluster.
 
 5. **Run the Prisma Migrate and Generate Commands:**
 
@@ -100,9 +100,9 @@ A scalable notification system built with Node.js and Express, utilizing Kafka f
     Start each consumer to process notifications from Kafka:
 
     ```bash
-    cd email-consumer && npm run start
-    cd sms-consumer && npm run start
-    cd whatsapp-consumer && npm run start
+    cd email && npm run start
+    cd sms && npm run start
+    cd whatsapp && npm run start
     ```
 
 ## API Endpoint
