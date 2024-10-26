@@ -1,10 +1,14 @@
 import {createClient, RedisClientType} from 'redis'
+import dotenv from 'dotenv'
+dotenv.config()
 
 const emailPriority = ["email-1", "email-2", "email-3"]
 const smsPriority =   ["sms-1", "sms-2", "sms-3"]
 const whatsAppPriority = ["whatsapp-1", "whatsapp-2", "whatsapp-3"]
 
-const client = createClient();
+const client = createClient({
+  url: process.env.REDIS_URL || 'redis://localhost:6379'
+});
 
 //redispop  
 //emails priorty kya h

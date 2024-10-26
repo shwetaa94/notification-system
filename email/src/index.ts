@@ -1,7 +1,9 @@
 import { createClient } from "redis";
 import { EmailManager } from "./EmailManager";
 
-const client = createClient()
+const client =  createClient({
+    url: process.env.REDIS_URL || 'redis://localhost:6379'
+  });
 
 async function main(){
     await client.connect()

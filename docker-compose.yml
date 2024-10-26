@@ -1,0 +1,115 @@
+version: '3.8'
+
+services:
+  api:
+    build: 
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    environment:
+      REDIS_URL: redis://redis:6379
+      DATABASE_URL: postgres://postgres:password@postgres:5432/notifications
+      EMAIL: ${EMAIL}
+      PHONE: ${PHONE}
+    depends_on: 
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  filter:
+    build: 
+      context: ./filter
+    environment:
+      REDIS_URL: redis://redis:6379
+    depends_on: 
+      redis:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  sms:
+    build: 
+      context: ./sms
+    environment:
+      REDIS_URL: redis://redis:6379
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+      TWILIO_SMS_FROM: ${TWILIO_SMS_FROM}
+    depends_on: 
+      redis:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  whatsapp:
+    build: 
+      context: ./whatsapp
+    environment:
+      REDIS_URL: redis://redis:6379
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+      TWILIO_WHATSAPP_FROM: ${TWILIO_WHATSAPP_FROM}
+    depends_on: 
+      redis:
+        condition: service_healthy  
+    networks:
+      - app-network
+
+  email:
+    build: 
+      context: ./email
+    environment:
+      REDIS_URL: redis://redis:6379
+      BREVO_API_KEY: ${BREVO_API_KEY}
+      SENDER_EMAIL: ${SENDER_EMAIL}
+      SENDER_NAME: ${SENDER_NAME}
+    depends_on: 
+      redis:
+        condition: service_healthy  
+    networks:
+      - app-network
+
+  redis:    
+    image: redis:alpine
+    container_name: redis
+    restart: always
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: notifications
+    ports:
+      - 5432:5432
+    volumes:
+      - notification_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "notifications"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+volumes:
+  notification_data:
+
+networks:
+  app-network:
+    driver: bridge
