@@ -1,6 +1,6 @@
 # Notification System
 
-A scalable notification system built with Node.js and Express, utilizing Redis for message handling and microservices architecture. The backend API pushes notification data to Redis, which is then processed by dedicated consumers for email, SMS, and WhatsApp notifications.
+A Node.js/Express-based notification system that accepts notification requests through an API, enqueues them (Redis), and processes them with independent consumers for different channels (Email, SMS, WhatsApp). Prisma is used for DB migrations / models. Third-party providers (e.g., Brevo for email and Tailliwo for SMS/WhatsApp) are used by each consumer to actually send messages. The repo is Docker-friendly and includes consumer services separated by concern.
 
 ## Images
 
@@ -25,14 +25,34 @@ A scalable notification system built with Node.js and Express, utilizing Redis f
 - **Brevo**: Service provider for email notifications.
 - **Tailliwo**: Service provider for SMS and WhatsApp messaging.
 
-## Architecture
+## Architecture Overview
 
-1. **Backend API**: Exposes a single endpoint to receive notification requests and pushes notification data to Redis.
-2. **Redis**: Handles asynchronous message processing and routing.
-3. **Consumers**: Dedicated services for processing notifications:
-   - **Email Consumer**: Sends notifications via Brevo.
-   - **SMS Consumer**: Sends notifications via Tailliwo.
-   - **WhatsApp Consumer**: Sends notifications via Tailliwo.
+1. Backend API receives notification requests and pushes them to Redis.
+2. Redis acts as a queue for asynchronous processing.
+3. Channel-specific consumers read from Redis:
+   - Email Consumer
+   - SMS Consumer
+   - WhatsApp Consumer
+4. Each consumer sends the notification using its respective provider.
+
+
+# Step-by-Step Notification Flow
+1. Backend API receives notification requests and pushes them to Redis.
+2. Redis acts as a queue for asynchronous processing.
+3. Channel-specific consumers read from Redis:
+   - Email Consumer
+   - SMS Consumer
+   - WhatsApp Consumer
+4. Each consumer sends the notification using its respective provider.
+1. Client sends a POST request to `/api/notifications`.
+2. API validates the request payload.
+3. API stores a notification record in the database.
+4. API pushes one or more jobs (one per channel) into Redis.
+5. The respective consumer (email, sms, whatsapp) picks the job from Redis.
+6. Consumer loads the template and merges dynamic data.
+7. Consumer sends the message using Brevo or Tailliwo.
+8. Consumer updates the notification status in the database.
+9. Failed messages may be retried. After maximum retries, they are moved to a Dead Letter Queue (DLQ).
 
 ## Getting Started
 
